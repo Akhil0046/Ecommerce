@@ -28,12 +28,12 @@ const register = async (req, res, next)=>{
                 email,
                 role
             })
-            const token = jwt.sign({
-                    _id: newUser.email
-                },process.env.jwtSecret )
+            // const token = jwt.sign({
+            //         _id: newUser.email
+            //     },process.env.jwtSecret )
             res.status(200).json({
                 error: false,
-                token: token,
+                // token: token,
                 message:"User Registered Successfully",
                 response: newUser
             })
@@ -70,13 +70,13 @@ const login = async (req, res, next)=>{
                 password,
                 
             })
-            // const token = jwt.sign({
-            //     _id: newUser.email
-            // }, process.env.jwtSecret);
+            const token = jwt.sign({
+                _id: newUser.email
+            }, process.env.jwtSecret);
 
             res.status(200).json({
                 error: false,
-                // token:token,
+                token:token,
                 message:"User Login Successfully",
                 response: newUser
             })
