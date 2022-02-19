@@ -26,22 +26,15 @@ const getAllCartDetails = async (req, res, next) => {
 }
 const addcartDetails = async (req, res, next) => {
     try {
-        const {
-            name,
-            price,
-            quantity,
-        } = req.body;
-
-        let cartData = await cart.create({
-            name: name,
-            price: price,
-            quantity: quantity,
+        const {cartData} = req.body;
+        let cartItemData = await cart.create({
+            cartData
         });
 
         res.send({
             error: false,
             message: "cart details added successfully",
-            response: cartData
+            response: cartItemData
         })
 
     } catch (err) {
@@ -51,19 +44,12 @@ const addcartDetails = async (req, res, next) => {
 
 const UpdatecartdDetails = async (req, res, next) => {
     try {
-        const {
-            name,
-            price,
-            quantity,
-        } = req.body;
+        const {cartData} = req.body;
 
         let editcartDetails = await cart.findByIdAndUpdate({
             _id: req.params.id
-        }, {
-            name: name,
-            price: price,
-            quantity: quantity,
-        }, {
+        }, {cartData},
+         {
             new: true
         })
 
@@ -78,13 +64,9 @@ const UpdatecartdDetails = async (req, res, next) => {
 }
 const DeletecartdDetails = async (req, res, next) => {
     try {
-        const {
-            name,
-            price,
-        } = req.body;
-
+        const{cartData}=req.body
         let deleteCartDetails = await cart.findByIdAndDelete({
-            _id: req.params.id
+            _id: req.params.id,
         })
 
         res.status(200).json({
@@ -96,64 +78,63 @@ const DeletecartdDetails = async (req, res, next) => {
         next(err.message)
     }
 }
-const addproductToCart = async (req, res, next) => {
-    try {
-        const {
-            quantity,
-            productId
-        } = req.body;
-        let productData = await product.findById({
-            _id: productId
-        });
-        if (productData) {
-         let cartData=   await cart.findByIdAndUpdate({
-                _id: req.params.id
-            }, {
-                $set: {
-                    name: productData.name,
-                    price: productData.price,
-                    quantity: quantity,
-                    productId: productData._id
-                }
-            },{new:true});
-            res.send({
-                error: false,
-                message: "product added to cart successfully",
-                response: cartData
-            })
-        }
+
+// const addproductToCart = async (req, res, next) => {
+//     try {
+//         const {cartData} = req.body;
+//         console.log(cartData.productId);
+//         let productData = await product.findById({
+//             _id: cartData.productId
+//         });
+//         if (productData) {
+//          let cartItemData=   await cart.findByIdAndUpdate({
+//                 _id: req.params.id
+//             }, {
+//                 $set: {
+//                     name: productData.name,
+//                     price: productData.price,
+//                     quantity: cartData.quantity,
+//                     productId: productData._id
+//                 }
+//             },{new:true});
+//             res.send({
+//                 error: false,
+//                 message: "product added to cart successfully",
+//                 response: cartItemData
+//             })
+//         }
         
 
-    } catch (err) {
-        next(err.message)
-    }
-}
-const deleteProductFormCart = async (req, res, next) => {
-    try {
-        const {
-            productId
-        } = req.body;
-        console.log(req.body);
-        console.log();
-        let deleteCartDetails = await cart.deleteOne({
-            productId: req.params.productId
-        })
-        res.status(200).json({
-            error: false,
-            message: "deleted from cart sucessfully",
-            response: deleteCartDetails
-        })
+//     } catch (err) {
+//         next(err.message)
+//     }
+// }
+// const deleteProductFormCart = async (req, res, next) => {
+//     try {
+//         const {
+//             productId
+//         } = req.body;
+//         console.log(req.body);
+//         console.log();
+//         let deleteCartDetails = await cart.deleteOne({
+//             productId: req.params.productId
+//         })
+//         res.status(200).json({
+//             error: false,
+//             message: "deleted from cart sucessfully",
+//             response: deleteCartDetails
+//         })
         
 
-    } catch (err) {
-        next(err.message)
-    }
-}
+//     } catch (err) {
+//         next(err.message)
+//     }
+// }
 module.exports = {
     getAllCartDetails,
     addcartDetails,
     UpdatecartdDetails,
     DeletecartdDetails,
-    addproductToCart,
-    deleteProductFormCart
+    // addproductToCart,
+    // deleteProductFormCart
 }

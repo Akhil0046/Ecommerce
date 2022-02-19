@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const productController = require('../controllers/product-controller')
+const productController = require('../controller/product-controller')
+const authentication= require('../middleware/authentication')
 
 router.get('/product-data',authentication.auth,productController.getAllproductDetails)
 router.post('/add-product-data',authentication.auth,productController.addproductDetails)

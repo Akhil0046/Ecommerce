@@ -18,7 +18,14 @@ app.use(express.json({
     limit: "20mb"}));
 
     const auth = require('./router/authRouter');
-
+    const product = require('./router/product-routes');
+    const cart=require('./router/cart-routes');
+    const payment=require('./router/payment-routes');
+    
+    app.use('/auth',auth)
+    app.use('/product', product);
+    app.use('/cart',cart);
+    app.use('/payment',payment);
     app.use('/auth',auth)
 
 app.get('/', (req, res) => {
