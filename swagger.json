@@ -1,0 +1,308 @@
+{
+    "swagger": "2.0",
+    "info": {
+      "version": "1.0.0",
+      "title": "ECOMMERCE",
+      "description": " Buying and Selling of goods and services via internet "
+    },
+    "host": "localhost:2300",
+    "basePath": "/",
+    "tags": [{
+        "name": "Auth",
+        "description": "Authentication routes"
+      },
+      {
+        "name": "Cart",
+        "description": "Cart routes"
+      },
+      {
+        "name": "Payment",
+        "description": "Payment routes"
+      },
+      {
+        "name": "Product",
+        "description": "Product routes"
+      }
+    ],
+    "schemes": [
+      "http",
+      "https"
+    ],
+    "consumes": [
+      "application/json"
+    ],
+    "produces": [
+      "application/json"
+    ],
+    "definitions": {
+      "register": {
+        "type": "object",
+        "properties": {
+            "fullname":{
+                "type": "string",
+                "description": " To register, you must provide your full name.",
+                "example": "Write your fullname"
+            },
+          "email": {
+            "type": "string",
+            "description": "Email id to login",
+            "example": "example@gmail.com"
+          },
+          "password": {
+            "type": "string",
+            "description": "Enter a valid password",
+            "example": "example@123"
+          },
+          "role": {
+            "type": "string",
+            "description": "Role of user",
+            "example": "User  and  Admin"
+          }
+        }
+      },
+      "login": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "Registrant's e-mail address",
+            "example": "example@gmail.com"
+          },
+          "password": {
+            "type": "String",
+            "description": "Enter your registration password",
+            "example": "Example@123"
+          }
+        }
+      },
+     
+        "reset-password": {
+          "type": "object",
+          "properties": {
+            "email": {
+              "type": "string",
+              "description": "Email ID To Login",
+              "example": "example@gmail.com"
+            },
+            "password": {
+              "type": "string",
+              "description": "Enter A Valid Password",
+              "example": "Example@123"
+            }
+          }
+      },
+      "cart":{
+        "type":"object",
+        "properties":{
+          "name":{
+            "type": "string",
+            "description": " The cart's name",
+            "example": "shopping"
+          },
+            "price":{
+              "type": "String",
+              "description": "Price of the product",
+              "example": "1200 rupees"
+            },
+            "quantity":{
+              "type": "String",
+              "description": "The product's quantity",
+              "example": " 02 numbers"
+            },
+            "productId": {
+              "type": "String",
+              "description": "productId is the unique identifier for a single product",
+              "example": "Samsung123"
+            }
+        }
+      },
+      "payment":{
+        "type": "object",
+        "properties":{
+            "cardName":{
+              "type": "string",
+              "description": "Using a debit or credit card",
+              "example": "Visa card"
+            },
+              "cvv":{
+                "type": "String",
+                "description": "card's unique cvv number",
+                "example": "856"
+              }
+          }
+        
+
+      },
+      "product":{
+        "type": "object",
+        "properties":{
+            "name":{
+              "type": "string",
+              "description": "name of the product",
+              "example": " Mobile phone"
+            },
+              "price":{
+                "type": "String",
+                "description": "price of the product",
+                "example": "1000 rupees"
+              },
+              "quantity":{
+                "type": "String",
+                "description": "The product's quantity",
+                "example": "04 numbers"
+              }
+          }
+        
+
+      }
+    },
+    "paths": {
+      "/auth/register": {
+        "post": {
+          "tags": ["Auth"],
+          "parameters": [{
+            "name": "body",
+            "in": "body",
+            "description": "Register User",
+            "required": true,
+            "type": "object",
+            "schema": {
+              "$ref": "#/definitions/register"
+            }
+          }],
+          "summary": "Register the User",
+        "responses": {
+          "200": {
+            "description": "Ok"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "404": {
+            "description": "Page Not Found or File Not Found"
+          },
+          "401": {
+            "description": "Unauthorized user or admin"
+          }
+        }
+        }
+      },
+      "/auth/login":{
+        "post":{
+          "tags":["Auth"],
+          "parameters": [{
+            "name": "body",
+            "in": "body",
+            "description": "Login User",
+            "required": true,
+            "type": "object",
+            "schema": {
+              "$ref": "#/definitions/login"
+            }
+          }],
+          "summary": "Register the User",
+        "responses": {
+          "200": {
+            "description": "Ok"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "404": {
+            "description": "Page Not Found or File Not Found"
+          },
+          "401": {
+            "description": "Unauthorized user or admin"
+          }
+        }
+  
+        }
+      },
+      "/auth/reset-password":{
+        "post":{
+          "tags":["Auth"],
+          "parameters": [{
+            "name": "body",
+            "in": "body",
+            "description": "Reset password",
+            "required": true,
+            "type": "object",
+            "schema": {
+              "$ref": "#/definitions/reset-password"
+            }
+          }],
+          "summary": "Reset password",
+        "responses": {
+          "200": {
+            "description": "Ok"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "404": {
+            "description": "Page Not Found or File Not Found"
+          },
+          "401": {
+            "description": "Unauthorized user or admin"
+          }
+        }
+      }
+      },
+     
+      "/product/add-cart-data":{
+        "post": {
+          "tags": ["Cart"],
+          "parameters": [
+            {
+              "in": "formData",
+              "name": "name",
+              "type": "string",
+              "required": true,
+              "description": "The cart's name"
+            
+          },
+          {
+            "in": "formData",
+            "name": "price",
+            "type": "string",
+            "required": true,
+            "description": "Price of the product"
+        },{
+          "in": "formData",
+          "name": "quantity",
+          "type": "string",
+          "required": true,
+          "description": "The product's quantity"
+      },{
+        "in": "formData",
+        "name": "productId",
+        "type": "string",
+        "required": true,
+        "description": "productId is the unique identifier for a single product",
+        "schema" : {
+            "$ref": "#/definitions/cart"
+          }
+    }           
+],
+          "summary": "Cart details of the User",
+        "responses": {
+          "200": {
+            "description": "Ok"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "404": {
+            "description": "Page Not Found or File Not Found"
+          },
+          "401": {
+            "description": "Unauthorized user or admin"
+          }
+        }
+        }
+      }
+
+      
+      
+    }
+  }
