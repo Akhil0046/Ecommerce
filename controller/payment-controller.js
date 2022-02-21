@@ -19,6 +19,25 @@ const getAllpaymentDetails = async (req, res, next) => {
         next(err.message)
     }
 }
+const getpaymentDetailsById = async (req, res, next) => {
+    try {
+        const paymentData = await payment.find({_id:req.params.id});
+        if (paymentData) {
+            res.status(200).json({
+                error: false,
+                message: 'payment data fetched successfully',
+                response: paymentData
+            })
+        } else {
+            res.status(404).json({
+                error: false,
+                message: "No data found",
+            })
+        }
+    } catch (err) {
+        next(err.message)
+    }
+}
 const addpaymentDetails = async (req, res, next) => {
     try {
         const {
@@ -82,5 +101,6 @@ module.exports = {
     getAllpaymentDetails,
     addpaymentDetails,
     UpdatepaymentdDetails,
-    DeletepaymentdDetails
+    DeletepaymentdDetails,
+    getpaymentDetailsById
 }

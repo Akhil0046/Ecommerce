@@ -3,9 +3,28 @@ const {
     product
 } = require('../model/product-model');
 
+const getProductDetailsById = async (req, res, next) => {
+    try {
+        const productData = await product.find({ _id:req.params.id});
+        if (productData) {
+            res.status(200).json({
+                error: false,
+                message: 'product data fetched successfully',
+                response: productData
+            })
+        } else {
+            res.status(404).json({
+                error: false,
+                message: "No data found",
+            })
+        }
+    } catch (err) {
+        next(err.message)
+    }
+}
 const getAllproductDetails = async (req, res, next) => {
     try {
-        const productData = await product.find();
+        const productData = await product.findById();
         if (productData) {
             res.status(200).json({
                 error: false,
@@ -27,11 +46,15 @@ const addproductDetails = async (req, res, next) => {
         const {
             name,
             price,
+            quantity,
+            imgUrl
         } = req.body;
 
         let productData = await product.insertMany({
             name: name,
             price: price,
+            quantity:quantity,
+            imgUrl:imgUrl
         });
        
         res.send({
@@ -91,4 +114,5 @@ module.exports = {
     addproductDetails,
     UpdateproductdDetails,
     DeleteproductdDetails,
+    getProductDetailsById
 }

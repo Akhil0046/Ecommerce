@@ -4,6 +4,8 @@ const productController = require('../controller/product-controller')
 const authentication= require('../middleware/authentication')
 
 router.get('/product-data',authentication.auth,productController.getAllproductDetails)
+router.get('/product-dataById',authentication.auth,productController.getProductDetailsById)
+
 router.post('/add-product-data',authentication.auth,productController.addproductDetails)
 router.put('/update-product-data/:id',authentication.auth,productController.UpdateproductdDetails)
  router.delete('/delete-data/:id',authentication.auth,productController.DeleteproductdDetails)
