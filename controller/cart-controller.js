@@ -24,6 +24,25 @@ const getAllCartDetails = async (req, res, next) => {
         next(err.message)
     }
 }
+const getCartDetailsById = async (req, res, next) => {
+    try {
+        const cartData = await cart.find({_id:req.params.id});
+        if (cartData) {
+            res.status(200).json({
+                error: false,
+                message: 'cart data fetched successfully',
+                response: cartData
+            })
+        } else {
+            res.status(404).json({
+                error: false,
+                message: "No data found",
+            })
+        }
+    } catch (err) {
+        next(err.message)
+    }
+}
 const addcartDetails = async (req, res, next) => {
     try {
         const {cartData} = req.body;
@@ -62,79 +81,74 @@ const UpdatecartdDetails = async (req, res, next) => {
         next(err.message)
     }
 }
-const DeletecartdDetails = async (req, res, next) => {
+
+const addproductToCart = async (req, res, next) => {
     try {
-        const{cartData}=req.body
-        let deleteCartDetails = await cart.findByIdAndDelete({
-            _id: req.params.id,
+        const {cartData} = req.body;
+        let productData = await product.findById({
+            _id: cartData.productId
+        });
+        if (productData) {
+         let cartItemData=   await cart.findByIdAndUpdate({
+                _id: req.params.id
+            }, {
+                $set: {
+                    productId: productData._id
+                }
+            },{new:true});
+            res.send({
+                error: false,
+                message: "cart updated successfully",
+                response: cartItemData
+            })
+        }
+        else{
+            let cartItemData = await cart.create({ cartData }); 
+            res.send({
+                error: false,
+                message: "product added to cart successfully",
+                response: cartItemData
+            })
+        }
+        
+
+  } catch (err) {
+        next(err.message)
+    }
+}
+const deleteProductFormCart = async (req, res, next) => {
+    try {
+        const  productData  = req.body;
+        const cartItemData = await cart.find({_id:req.params.id});
+        cartItemData[0].cartData.forEach((ele,i)=>{
+            productData.cartData.forEach(pval=>{
+                if (ele.productId ==pval.productId) {
+                     cartItemData[0].cartData.splice(i,1)
+                }
+            })
         })
+      console.log(cartItemData[0].cartData);
+        let editcartDetails = await cart.findByIdAndUpdate({
+            _id: req.params.id
+        }, {cartData:cartItemData[0].cartData},
+         )
 
         res.status(200).json({
             error: false,
-            message: "Cart details deleted sucessfully",
-            response: deleteCartDetails
+            message: "deleted from cart sucessfully",
+            response:editcartDetails
         })
+        
+
     } catch (err) {
         next(err.message)
     }
 }
-
-// const addproductToCart = async (req, res, next) => {
-//     try {
-//         const {cartData} = req.body;
-//         console.log(cartData.productId);
-//         let productData = await product.findById({
-//             _id: cartData.productId
-//         });
-//         if (productData) {
-//          let cartItemData=   await cart.findByIdAndUpdate({
-//                 _id: req.params.id
-//             }, {
-//                 $set: {
-//                     name: productData.name,
-//                     price: productData.price,
-//                     quantity: cartData.quantity,
-//                     productId: productData._id
-//                 }
-//             },{new:true});
-//             res.send({
-//                 error: false,
-//                 message: "product added to cart successfully",
-//                 response: cartItemData
-//             })
-//         }
-        
-
-//     } catch (err) {
-//         next(err.message)
-//     }
-// }
-// const deleteProductFormCart = async (req, res, next) => {
-//     try {
-//         const {
-//             productId
-//         } = req.body;
-//         console.log(req.body);
-//         console.log();
-//         let deleteCartDetails = await cart.deleteOne({
-//             productId: req.params.productId
-//         })
-//         res.status(200).json({
-//             error: false,
-//             message: "deleted from cart sucessfully",
-//             response: deleteCartDetails
-//         })
-        
-
-//     } catch (err) {
-//         next(err.message)
-//     }
-// }
 module.exports = {
     getAllCartDetails,
     addcartDetails,
     UpdatecartdDetails,
-    DeletecartdDetails,
-    // addproductToCart,
-    // deleteProductFormCart
+    getCartDetailsById,
+     deleteProductFormCart,
+     addproductToCart
 }
