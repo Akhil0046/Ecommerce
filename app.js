@@ -36,6 +36,14 @@ app.get('/', (req, res) => {
     });
 });
 
+
+
+  
+// Swagger 
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocument = require('./swagger.json');
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
 //error handling middleware
 app.use((err, req, res, next) => {
     res.status(500).json({
@@ -44,6 +52,7 @@ app.use((err, req, res, next) => {
         details: err
     })
 });
+
 
 app.listen(port, () => {
     console.log(`App is running on port ${port}`);
