@@ -9,14 +9,12 @@ const auth = (req, res, next) => {
 
   try {
     token = token.split(' ')[1]
-    console.log(token,"token");
     if (token === null || !token) return res.status(401).json({
       error: true,
       message: "Access Denied / Unauthorized request"
     });
 
     let verifiedUser = jwt.verify(token, process.env.jwtSecret);
-    console.log(verifiedUser,"verifiedUser");
     if (!verifiedUser) {
         console.log("not verigy");
       return res.status(401).json({
@@ -24,7 +22,6 @@ const auth = (req, res, next) => {
         message: "Access Denied / Unauthorized request"
       });
     } else {
-        console.log("else");
       next()
     }
   } catch (err) {
