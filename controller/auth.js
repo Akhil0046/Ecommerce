@@ -64,12 +64,6 @@ const login = async (req, res, next)=>{
 
         if (user) {
            if (bcryptjs.compareSync(password, user.password)) {
-            const newUser = await Login.insertMany({
-                
-                email,
-                password,
-                
-            })
             const token = jwt.sign({
                 _id: newUser.email
             }, process.env.jwtSecret);

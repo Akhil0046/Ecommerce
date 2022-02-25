@@ -24,7 +24,7 @@ const getProductDetailsById = async (req, res, next) => {
 }
 const getAllproductDetails = async (req, res, next) => {
     try {
-        const productData = await product.findById();
+        const productData = await product.find();
         if (productData) {
             res.status(200).json({
                 error: false,
