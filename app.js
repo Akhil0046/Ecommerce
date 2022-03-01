@@ -1,6 +1,10 @@
 const express = require('express');
 const cors = require('cors');
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocs = require('./swagger.json');
+
 const app = express();
+
 // env config
 require('dotenv').config();
 
@@ -13,36 +17,34 @@ require('./db');
 app.use(cors());
 
 // bodyparser middleware
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({
+    extended: false
+}));
 app.use(express.json({
-    limit: "20mb"}));
+    limit: "20mb"
+}));
 
-    const auth = require('./router/authRouter');
-    const product = require('./router/product-routes');
-    const cart=require('./router/cart-routes');
-    const payment=require('./router/payment-routes');
-    
-    app.use('/auth',auth)
-    app.use('/product', product);
-    app.use('/cart',cart);
-    app.use('/payment',payment);
-    app.use('/auth',auth)
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+
+
+const auth = require('./router/authRouter');
+const product = require('./router/product-routes');
+const cart = require('./router/cart-routes');
+const payment = require('./router/payment-routes');
+
+app.use('/auth', auth)
+app.use('/product', product);
+app.use('/cart', cart);
+app.use('/payment', payment);
+app.use('/auth', auth)
 
 app.get('/', (req, res) => {
     res.json({
         app: 'Ecommerce',
         path: '/',
-        response:"ok"
+        response: "ok"
     });
 });
-
-
-
-  
-// Swagger 
-const swaggerUi = require('swagger-ui-express');
-const swaggerDocument = require('./swagger.json');
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 //error handling middleware
 app.use((err, req, res, next) => {
@@ -57,5 +59,5 @@ app.use((err, req, res, next) => {
 app.listen(port, () => {
     console.log(`App is running on port ${port}`);
 }).on('error', function (err) {
-    console.log("Something Went Worng",err);
+    console.log("Something Went Worng", err);
 });

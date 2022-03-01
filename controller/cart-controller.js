@@ -83,7 +83,7 @@ const UpdatecartdDetails = async (req, res, next) => {
 }
 
 const addproductToCart = async (req, res, next) => {
-    try {
+    try { 
         const {cartData} = req.body;
         let productData = await product.findById({
             _id: cartData.productId
@@ -103,7 +103,8 @@ const addproductToCart = async (req, res, next) => {
             })
         }
         else{
-            let cartItemData = await cart.create({ cartData }); 
+            let cartItemData = await cart.create({ cartData });
+            console.log(cartItemData); 
             res.send({
                 error: false,
                 message: "product added to cart successfully",

@@ -4,18 +4,22 @@ const {
 } = require('../model/product-model');
 
 const getProductDetailsById = async (req, res, next) => {
+    console.log(req.params.id);
     try {
         const productData = await product.find({ _id:req.params.id});
         if (productData) {
+            console.log(productData);
             res.status(200).json({
                 error: false,
                 message: 'product data fetched successfully',
                 response: productData
             })
         } else {
+            console.log(productData);
             res.status(404).json({
                 error: false,
                 message: "No data found",
+                
             })
         }
     } catch (err) {
@@ -26,6 +30,7 @@ const getAllproductDetails = async (req, res, next) => {
     try {
         const productData = await product.find();
         if (productData) {
+            console.log(productData);
             res.status(200).json({
                 error: false,
                 message: 'product data fetched successfully',
